@@ -103,14 +103,14 @@ public class Point3D {
 	 * Getters for the three coordinates
 	 * @return Coordinate
 	 */
-	public Coordinate getX() {
-		return _x;
+	public double getX() {
+		return _x.get();
 	}
-	public Coordinate getY() {
-		return _y;
+	public double getY() {
+		return _y.get();
 	}
-	public Coordinate getZ() {
-		return _z;
+	public double getZ() {
+		return _z.get();
 	}
 	
 	@Override

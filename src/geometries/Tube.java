@@ -1,9 +1,12 @@
 package geometries;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import primitives.*;
  
 
-public class Tube extends RadialGeometry {
+public class Tube extends RadialGeometry implements Intersectable{
 
 	Ray _axisRay;
 	
@@ -32,6 +35,13 @@ public class Tube extends RadialGeometry {
         return n;
 
         }
+
+
+	@Override
+	public List<Point3D> findIntersections(Ray ray) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	 
 	
 	

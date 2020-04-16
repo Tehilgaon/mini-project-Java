@@ -2,6 +2,7 @@
 package geometries;
 
 import java.util.List;
+import java.util.ArrayList;
 import primitives.*;
 import static primitives.Util.*;
 
@@ -11,7 +12,7 @@ import static primitives.Util.*;
  * 
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon implements Geometry, Intersectable {
     /**
      * List of polygon's vertices
      */
@@ -85,4 +86,31 @@ public class Polygon implements Geometry {
     public Vector getNormal(Point3D point) {
         return _plane.getNormal(point);
     }
+
+	@Override
+	public List<Point3D> findIntersections(Ray ray) {
+		Plane plane=new Plane(_vertices.get(0),_vertices.get(1).subtract(_vertices.get(0)) //Create a Plane object and send it a Point3D and a Vector
+				.crossProduct(_vertices.get(2).subtract(_vertices.get(1))));
+		List<Point3D> list=plane.findIntersections(ray); //calling the plane's findIntersections method
+		if(list!=null)
+		{
+			List<Vector> vectorList=new ArrayList<Vector>(); //vectorList contains the results of subtracting P0 from the polygon vertexes
+			for(int i=0;i<_vertices.size();i++) 
+				vectorList.add(_vertices.get(i).subtract(ray.getP0()));
+			List<Double> resultList=new ArrayList<Double>(); //resultList contains the results of dotProduct between the normal of each 'wall' and the ray's vector
+			for(int i=0;i<_vertices.size();i++)
+			{
+				if(i+1==_vertices.size())
+					resultList.add((vectorList.get(0).crossProduct(vectorList.get(i))).dotProduct(ray.getDirection()));
+				else
+					resultList.add(vectorList.get(i+1).crossProduct(vectorList.get(i)).dotProduct(ray.getDirection()));
+			}
+			double mult=1;
+			for(int i=0;i<resultList.size();i++)//multiplying all the results, and if they have the same sign, the final_result's sign will be positive
+				mult=resultList.get(i)*mult;
+			if (mult>0)
+				return list; 
+		}
+		return null;
+	}
 }

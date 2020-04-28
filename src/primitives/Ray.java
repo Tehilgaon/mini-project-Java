@@ -17,5 +17,15 @@ public class Ray {
 	{
 		return _p0.add(_dir.scale(t));
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if(this==obj) return true;
+		if(obj==null) return false;
+		if(!(obj instanceof Ray)) return false;
+		Ray oth=(Ray)obj;
+		return (_p0.equals(oth.getP0())&&_dir.equals(oth.getDirection()));
+		
+		
+	}
 
 }

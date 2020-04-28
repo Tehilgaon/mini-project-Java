@@ -5,10 +5,11 @@ import primitives.*;
 
 public class Sphere extends RadialGeometry implements Intersectable{
 	Point3D _q;
-	public Sphere(double radius, Point3D point) {
+	
+	public Sphere(double radius, Point3D point) 
+	{
 		super(radius);
 		_q=new Point3D(point);
- 
 	}
 
 	public primitives.Vector getNormal(Point3D point)
@@ -17,7 +18,8 @@ public class Sphere extends RadialGeometry implements Intersectable{
 	}
 
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
+	public List<Point3D> findIntersections(Ray ray)
+	{
 		double d=0,tm=0;
 		if(!ray.getP0().equals(_q)) //To avoid creating a Zero vector. If the ray's starting point is the center point, the 'd' remains 0
 		{	

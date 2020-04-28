@@ -1,8 +1,6 @@
 package geometries;
 
-import java.util.List;
-
-import primitives.*;
+ 
  
 
 public abstract class RadialGeometry implements Geometry{

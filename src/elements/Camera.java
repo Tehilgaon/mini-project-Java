@@ -70,14 +70,14 @@ public class Camera {
 	
 	/**
 	 * 
-	 * @param nX
-	 * @param nY
-	 * @param j
-	 * @param i
-	 * @param screenDistance
+	 * @param nX number of pixels in X axis
+	 * @param nY number of pixels in Y axis
+	 * @param j the column index (With i define a specific pixel)
+	 * @param i the row index (With j define a specific pixel)
+	 * @param screenDistance between the camera and the viewPlane
 	 * @param screenWidth
 	 * @param screenHeight
-	 * @return
+	 * @return new Ray object which is the ray through a specific index  
 	 */
 	public Ray constructRayThroughPixel (int nX, int nY,int j, int i, double screenDistance,
             double screenWidth, double screenHeight)

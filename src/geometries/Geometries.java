@@ -9,14 +9,17 @@ import primitives.*;
 public class Geometries implements Intersectable {
 
 	List<Intersectable> _geometries;
+	
 	public Geometries()
 	{
 		_geometries= new ArrayList<Intersectable>();
 	}
+	
 	public Geometries(Intersectable... geometries)
 	{
 		_geometries=List.of(geometries);
 	}
+	
 	public void add(Intersectable... geometries)
 	{
 		_geometries.addAll(List.of(geometries));

@@ -2,7 +2,10 @@ package scene;
 import primitives.*;
 import elements.*;
 import geometries.*;
+import java.util.List;
+import java.util.LinkedList;
 
+ 
 /** 
  * The class holds variables for the scene, the background color,
  * the geometries involved (a Geometries object), a Camera object,
@@ -38,18 +41,24 @@ public class Scene {
 	Camera _camera;
 	
 	/**
+	 * List of light sources
+	 */
+	List<LightSource> _lights;
+	
+	/**
 	 * The distance between the camera ang the viewPlane (double)
 	 */
 	double _distance;
 	
 	/**
-	 * constructor. It initializes the Geometries object
+	 * constructor. It initializes the Geometries object and the lights List
 	 * @param name scene's name
 	 */
 	public Scene(String name)
 	{
 		_name=name;
 		_geometries=new Geometries();
+		_lights= new LinkedList<LightSource>();
 	}
 	
 	/**
@@ -107,6 +116,15 @@ public class Scene {
 	}
 	
 	/**
+	 * _lights getter
+	 * @return the list of the light sources in the scene 
+	 */
+	public List<LightSource> getLights()
+	{
+		return _lights;
+	}
+	
+	/**
 	 * background setter
 	 * @param background color
 	 */
@@ -149,6 +167,15 @@ public class Scene {
 	public void addGeometries(Intersectable... geometries)
 	{
 		_geometries.add(geometries);
+	}
+	
+	/**
+	 * adding light sources to the _light list
+	 * @param lights- light Sources 
+	 */
+	public void addLights(LightSource... lights)
+	{
+		_lights.addAll(List.of(lights));
 	}
 	
 	

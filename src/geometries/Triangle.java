@@ -14,13 +14,26 @@ public class Triangle extends Polygon {
 		super(p1,p2,p3);
 	}
 	
+	public Triangle(Color color,Point3D p1,Point3D p2,Point3D p3)
+	{
+		super(color,p1,p2,p3);	
+	}
+	
+	public Triangle(Color color,Material material,Point3D p1,Point3D p2,Point3D p3)
+	{
+		super(material,color,p1,p2,p3);	
+	}
+	
 	@Override
 	public Vector getNormal(Point3D point) {
 		return super.getNormal(point);
 	}
 	
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
-		return super.findIntersections(ray);
+	public List<GeoPoint> findIntersections(Ray ray) {
+		List<GeoPoint> list = super.findIntersections(ray);
+		if(list!=null)
+			list.get(0).geometry=this;
+		return list; 
 	}
 }

@@ -3,6 +3,7 @@ package unittests;
  
 import geometries.*;
 import primitives.*;
+import geometries.Intersectable.GeoPoint;
 import static org.junit.Assert.assertEquals;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ class GeometriesTests {
 		assertEquals("Wrong number of points",null, geometries.findIntersections(new Ray(new Point3D(0,0,5),new Vector(0,0,1))));
 		
 		// TC03:  Ray intersect one geometry
-		List<Point3D>result=geometries.findIntersections(new Ray(new Point3D(0,0,1.5),new Vector(0,0,1)));
+		List<GeoPoint>result=geometries.findIntersections(new Ray(new Point3D(0,0,1.5),new Vector(0,0,1)));
 		assertEquals("Wrong number of points",1, result.size());
 		
 		// ============ Equivalence Partitions Tests ==============

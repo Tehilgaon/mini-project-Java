@@ -8,11 +8,24 @@ public class Tube extends RadialGeometry implements Intersectable{
 
 	Ray _axisRay;
 	
-	public Tube(double radius,Ray axis) {
+	public Tube(double radius,Ray axis) 
+	{
 		super(radius);
 		_axisRay=axis;
-		// TODO Auto-generated constructor stub
 	}
+	
+	public Tube(Color color,double radius,Ray axis) 
+	{
+		super(color,radius);
+		_axisRay=axis;
+	}
+	
+	public Tube(Material material,Color color,double radius,Ray axis) 
+	{
+		super(material,color,radius);
+		_axisRay=axis;
+	}
+
 
 	 
 	public Vector getNormal(Point3D point) {
@@ -36,7 +49,7 @@ public class Tube extends RadialGeometry implements Intersectable{
 
 
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray) {
 		// TODO Auto-generated method stub
 		return null;
 	}

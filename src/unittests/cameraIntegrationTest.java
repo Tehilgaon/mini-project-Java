@@ -6,6 +6,8 @@ import geometries.*;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.ArrayList;
+import geometries.Intersectable.GeoPoint;
+
 
 import elements.Camera;
 
@@ -76,14 +78,14 @@ class cameraIntegrationTest {
 	  * @param sd- screen Distance
 	  * @return List of Point3D , contains all the intersection points between all the rays and the geometry
 	  */
-	List<Point3D> findIntersection(Camera camera, Intersectable geometry, double sd)
+	List<GeoPoint> findIntersection(Camera camera, Intersectable geometry, double sd)
 	{
-		List<Point3D> pointsList=new ArrayList<Point3D>();
+		List<GeoPoint> pointsList=new ArrayList<GeoPoint>();
 		for(int i=0;i<3;i++)
 			for(int j=0;j<3;j++)
 			{
 				Ray ray=camera.constructRayThroughPixel(3, 3, j, i,sd,3,3);
-				List<Point3D> result=geometry.findIntersections(ray);
+				List<GeoPoint> result=geometry.findIntersections(ray);
 				if(result!=null)
 					pointsList.addAll(result);
 			}

@@ -3,7 +3,7 @@ package renderer;
 import scene.*;
 
 import java.util.List;
-
+import geometries.Intersectable.GeoPoint;
 import primitives.*;
 import elements.*;
 import geometries.*;
@@ -54,12 +54,12 @@ public class Render {
 			for(int j=0;j<nX;j++)
 			{
 				Ray ray = camera.constructRayThroughPixel(nX, nY, j, i, distance, width, height);
-				List<Point3D> intersectionPoints = geometries.findIntersections(ray);
+				List<GeoPoint> intersectionPoints = geometries.findIntersections(ray);
 				if(intersectionPoints==null)
 					_imageWriter.writePixel(j, i, background);
 				else
 				{
-					Point3D closestPoint = getClosestPoint(intersectionPoints);
+					GeoPoint closestPoint = getClosestPoint(intersectionPoints);
 					_imageWriter.writePixel(j, i, calcColor(closestPoint).getColor());
 				}
 			}
@@ -68,19 +68,49 @@ public class Render {
 	}
 	
 	 
-	private Color calcColor(Point3D p)
+	private Color calcColor(GeoPoint p)
 	{
-		return _scene.getAmbientLight().GetIntensity();
+		Color color=_scene.getAmbientLight().getIntensity();
+		color = color.add(p.geometry.getEmission());
+		Vector v=  p.point.subtract(_scene.getCamera().getP0()).normalized();
+		Vector n= p.geometry.getNormal(p.point);
+		Material material= p.geometry.getMaterial();
+		int nShininess= material.getNShininess();
+		double kd=material.getKD();
+		double ks=material.getKS();
+		for(int i=0; i<_scene.getLights().size();i++)
+		{
+			LightSource lightSource=_scene.getLights().get(i);
+			Vector l=lightSource.getL(p.point);
+			if(Math.signum(n.dotProduct(l))==Math.signum(n.dotProduct(v)))
+			{
+				Color lightIntensity = lightSource.getIntensity(p.point);
+				color = color.add(calcDiffusive(kd, l, n, lightIntensity),
+						calcSpecular(ks, l, n, v, nShininess, lightIntensity));			 
+			}		
+		}
+		return color;
 	}
 	
-	
-	private Point3D getClosestPoint(List<Point3D> points)
+	public Color calcDiffusive(double kd,Vector l, Vector n, Color lightIntensity)
 	{
-		Point3D minPoint=points.get(0);
-		double minDistance=_scene.getCamera().getP0().distance(minPoint);
+		return lightIntensity.scale(Math.abs(l.dotProduct(n))*kd);
+	}
+	
+	public Color calcSpecular(double ks, Vector l, Vector n, Vector v, int nShininess, Color lightIntensity)
+	{
+		Vector r= l.subtract(n.scale(2*l.dotProduct(n)));
+		double factor= Math.max(0, -v.dotProduct(r));
+		return lightIntensity.scale(ks*Math.pow(factor, nShininess));
+	}
+	
+	private GeoPoint getClosestPoint(List<GeoPoint> points)
+	{
+		GeoPoint minPoint=points.get(0);
+		double minDistance=_scene.getCamera().getP0().distance(minPoint.point);
 		for(int i=1;i<points.size();i++)
 		{
-			double distance=_scene.getCamera().getP0().distance(points.get(i));
+			double distance=_scene.getCamera().getP0().distance(points.get(i).point);
 			if(distance<minDistance)
 			{
 				minDistance=distance;

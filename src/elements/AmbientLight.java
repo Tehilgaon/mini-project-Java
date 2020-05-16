@@ -7,31 +7,18 @@ import primitives.*;
  * @author Odel @ Tehila
  *
  */
-public class AmbientLight {
+public class AmbientLight extends Light {
+ 
 	
 	/**
-	 * The intensity of the AmbientLight
-	 */
-	Color _intensity;
-	
-	/**
-	 * constructor
+	 * constructor, calls the base constructor and sends him the intensity * the reduction factor 
 	 * @param IA The light's intensity 
 	 * @param KA reduction factor
 	 */
 	public AmbientLight(Color IA, double KA)
 	{
-		_intensity=IA.scale(KA);
+		super(IA.scale(KA));
 	}
-	
-	/**
-	 * _intensity getter 
-	 * @return _intensity
-	 */
-	public Color GetIntensity()
-	{
-		return _intensity;
-	}
-			
+		
 
 }

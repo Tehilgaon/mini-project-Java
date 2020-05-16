@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import primitives.*;
 
-public class Plane implements Geometry, Intersectable
+public class Plane extends Geometry implements Intersectable
 {
 	Point3D _p;
 	Vector _normal;
@@ -14,12 +14,38 @@ public class Plane implements Geometry, Intersectable
 		_p=new Point3D(point);
 		_normal=new Vector(normal.normalized());
 	}
+	
+	public Plane(Color color,Point3D point,Vector normal)
+	{
+		this(point, normal);
+		_emission= color;
+	}
+	
+	public Plane(Material material,Color color,Point3D point,Vector normal)
+	{
+		this(color,point, normal);
+		_material= material;
+	}
+	
 	public Plane(Point3D p1,Point3D p2,Point3D p3)
 	{
 		Vector vec=p1.subtract(p2);
 		_normal=new Vector(vec.crossProduct(p2.subtract(p3))).normalized();
 		_p=new Point3D(p1);
 	}
+	
+	public Plane(Color color, Point3D p1,Point3D p2,Point3D p3)
+	{
+		this(p1,p2,p3);
+		_emission= color;
+	}
+	
+	public Plane(Material material, Color color, Point3D p1,Point3D p2,Point3D p3)
+	{
+		this(p1,p2,p3);
+		_material= material;	
+	}
+	
 	public Vector getNormal()
 	{
 		return _normal;
@@ -33,7 +59,7 @@ public class Plane implements Geometry, Intersectable
 	}
 	
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray) {
 		
 		double Nx=_normal.get().getX();
 		double Ny=_normal.get().getY();
@@ -58,8 +84,8 @@ public class Plane implements Geometry, Intersectable
 		double t=Util.alignZero(numerator/denominator);
 		if (t<0)
 			return null;
-		List<Point3D> list=new ArrayList<Point3D>();
-		list.add(ray.getPoint(t));
+		List<GeoPoint> list=new ArrayList<GeoPoint>();
+		list.add(new GeoPoint(ray.getPoint(t),this));
 		return list;
 	}
 

@@ -7,7 +7,7 @@ package unittests;
 import static org.junit.Assert.*;
 
 import java.util.List;
-
+import geometries.Intersectable.GeoPoint;
 import geometries.*;
 import primitives.*;
 import org.junit.jupiter.api.AfterEach;
@@ -46,9 +46,9 @@ class TriangleTests {
 		// ============ Equivalence Partitions Tests ==============
 
         // TC01:  Ray Inside triangle
-		List<Point3D> result=triangle.findIntersections(new Ray(new Point3D(1.5,0.75,-1),new Vector(0,0,1)));
+		List<GeoPoint> result=triangle.findIntersections(new Ray(new Point3D(1.5,0.75,-1),new Vector(0,0,1)));
 		assertEquals("Wrong number of points",1,result.size());
-		assertEquals("Wrong ray's direction",new Point3D(1.5,0.75,0),result.get(0));
+		assertEquals("Wrong ray's direction",new Point3D(1.5,0.75,0),result.get(0).point);
 		
 		// TC02:  Ray outside against edge
 		assertEquals("Wrong ray's direction",null,triangle.findIntersections(new Ray(new Point3D(0,2,0),new Vector(1,0,0))));

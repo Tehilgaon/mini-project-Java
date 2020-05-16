@@ -12,7 +12,7 @@ import static primitives.Util.*;
  * 
  * @author Dan
  */
-public class Polygon implements Geometry, Intersectable {
+public class Polygon extends Geometry implements Intersectable {
     /**
      * List of polygon's vertices
      */
@@ -81,19 +81,32 @@ public class Polygon implements Geometry, Intersectable {
                 throw new IllegalArgumentException("All vertices must be ordered and the polygon must be convex");
         }
     }
-
+    
+    public Polygon(Color color, Point3D... vertices ) 
+    {
+    	this(vertices);
+    	_emission= color;
+    }
+    
+    public Polygon(Material material,Color color, Point3D... vertices ) 
+    {
+    	this(color,vertices);
+    	_material= material; 
+    }
+    
     @Override
     public Vector getNormal(Point3D point) {
         return _plane.getNormal(point);
     }
 
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray) {
 		Plane plane=new Plane(_vertices.get(0),_vertices.get(1).subtract(_vertices.get(0)) //Create a Plane object and send it a Point3D and a Vector
 				.crossProduct(_vertices.get(2).subtract(_vertices.get(1))));
-		List<Point3D> list=plane.findIntersections(ray); //calling the plane's findIntersections method
+		List<GeoPoint> list=plane.findIntersections(ray); //calling the plane's findIntersections method
 		if(list!=null)
 		{
+			list.get(0).geometry = this;
 			List<Vector> vectorList=new ArrayList<Vector>(); //vectorList contains the results of subtracting P0 from the polygon vertexes
 			for(int i=0;i<_vertices.size();i++) 
 				vectorList.add(_vertices.get(i).subtract(ray.getP0()));

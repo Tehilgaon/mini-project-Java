@@ -6,9 +6,8 @@ package unittests;
 import static org.junit.Assert.*;
 
 import java.util.List;
-
+import geometries.Intersectable.GeoPoint;
 import org.junit.Test;
-
 import geometries.*;
 import primitives.*;
 
@@ -101,9 +100,9 @@ public class PolygonTests {
 		// ============ Equivalence Partitions Tests ==============
 
         // TC01:  Ray intersects the Polygon
-		List<Point3D> result=polygon.findIntersections(new Ray(new Point3D(0.5,0.5,-1),new Vector(0,0,1)));
+		List<GeoPoint> result=polygon.findIntersections(new Ray(new Point3D(0.5,0.5,-1),new Vector(0,0,1)));
 		assertEquals("Wrong number of points",1, result.size());
-		assertEquals("Wrong ray",new Point3D(0.5,0.5,0), result.get(0));
+		assertEquals("Wrong ray",new Point3D(0.5,0.5,0), result.get(0).point);
 		
 		// TC02:  Ray does not intersect the Plane that the Polygon is part of
 		assertEquals("Wrong ray's direction",null, polygon.findIntersections(new Ray(new Point3D(0.5,0.5,-1),new Vector(-1,-1,-1))));

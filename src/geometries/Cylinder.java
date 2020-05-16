@@ -1,18 +1,29 @@
 package geometries;
 
 import java.util.List;
-
 import primitives.*;
  
 
 public class Cylinder extends Tube {
 
 	double _height;
-	public Cylinder(double radius,Ray axis,double height) {
+	
+	public Cylinder(double radius,Ray axis,double height) 
+	{
 		super(radius, axis);
 		_height=height;
-		// TODO Auto-generated constructor stub
 	}
+	public Cylinder(Color color, double radius,Ray axis,double height) 
+	{
+		super(color,radius, axis);
+		_height=height;		
+	}
+	public Cylinder(Material material, Color color, double radius,Ray axis,double height) 
+	{
+		super(material, color,radius, axis);
+		_height=height;
+	}
+	
 	
 	@Override
 	public Vector getNormal(Point3D point) {
@@ -32,8 +43,7 @@ public class Cylinder extends Tube {
     
 	}
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
-		// TODO Auto-generated method stub
+	public List<GeoPoint> findIntersections(Ray ray) {
 		return null;
 	}
 

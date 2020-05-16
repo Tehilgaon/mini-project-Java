@@ -5,7 +5,7 @@ package unittests;
 import static org.junit.Assert.*;
 
 import java.util.List;
-
+import geometries.Intersectable.GeoPoint;
 import geometries.*;
 import primitives.*;
 import org.junit.jupiter.api.Test;
@@ -36,9 +36,9 @@ class PlaneTests {
 		// ============ Equivalence Partitions Tests ==============
 
         // TC01:  Ray intersects the plane
-		List<Point3D> result=plane.findIntersections(new Ray(new Point3D(0,0,-1),new Vector(1,1,1)));
+		List<GeoPoint> result=plane.findIntersections(new Ray(new Point3D(0,0,-1),new Vector(1,1,1)));
 		assertEquals("Wrong number of points",1, result.size());
-		assertEquals("Wrong ray",new Point3D(1,1,0), result.get(0));
+		assertEquals("Wrong ray",new Point3D(1,1,0), result.get(0).point);
 		
 		// TC02:  Ray does not intersect the plane
         assertEquals("Wrong ray's direction",null,plane.findIntersections(new Ray(new Point3D(0,0,-1),new Vector(-1,-1,-1))));
@@ -55,7 +55,7 @@ class PlaneTests {
         // TC05: Ray starts before the plane
         result=plane.findIntersections(new Ray(new Point3D(-1,-1,-1),new Vector(0,0,1)));
         assertEquals("Wrong number of points",1,result.size());
-        assertEquals("Wrong ray's direction",new Point3D(-1,-1,0),result.get(0));
+        assertEquals("Wrong ray's direction",new Point3D(-1,-1,0),result.get(0).point);
         
         // TC06: Ray starts before the plane
         assertEquals("Wrong ray's direction",null,plane.findIntersections(new Ray(new Point3D(-1,-1,0),new Vector(0,0,1))));

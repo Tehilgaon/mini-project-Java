@@ -119,7 +119,7 @@ public class Polygon extends Geometry implements Intersectable {
 					resultList.add(vectorList.get(i+1).crossProduct(vectorList.get(i)).dotProduct(ray.getDirection()));
 			}
 			double Plus=0, Minus=0;
-			for(int i=0;i<resultList.size();i++)//multiplying all the results, and if they have the same sign, the final_result's sign will be positive
+			for(int i=0;i<resultList.size();i++)
 			{
 				if(resultList.get(i)>0)
 					Plus++;

@@ -29,9 +29,5 @@ public class SpotLight extends PointLight
 		return super.getIntensity(p).scale(Math.max(0,result));
 	}
 
-	@Override
-	public Vector getL(Point3D p) {
-		return _direction;
-	}
 
 }

@@ -27,11 +27,11 @@ public class Geometries implements Intersectable {
 	 
 
 	@Override
-	public List<GeoPoint> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray, double max) {
 		List<GeoPoint> list=new ArrayList<GeoPoint>();
 		for(int i=0;i<_geometries.size();i++)
 		{
-			List<GeoPoint> geometryList=_geometries.get(i).findIntersections(ray);
+			List<GeoPoint> geometryList=_geometries.get(i).findIntersections(ray, max);
 			if(geometryList!=null)
 				list.addAll(geometryList);
 		}

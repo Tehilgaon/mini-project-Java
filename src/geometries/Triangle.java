@@ -30,8 +30,8 @@ public class Triangle extends Polygon {
 	}
 	
 	@Override
-	public List<GeoPoint> findIntersections(Ray ray) {
-		List<GeoPoint> list = super.findIntersections(ray);
+	public List<GeoPoint> findIntersections(Ray ray, double max) {
+		List<GeoPoint> list = super.findIntersections(ray, max);
 		if(list!=null)
 			list.get(0).geometry=this;
 		return list; 

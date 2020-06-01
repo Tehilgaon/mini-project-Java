@@ -31,7 +31,7 @@ public class Sphere extends RadialGeometry implements Intersectable{
 	}
 
 	@Override
-	public List<GeoPoint> findIntersections(Ray ray)
+	public List<GeoPoint> findIntersections(Ray ray,double max)
 	{
 		double d=0,tm=0;
 		if(!ray.getP0().equals(_q)) //To avoid creating a Zero vector. If the ray's starting point is the center point, the 'd' remains 0
@@ -45,11 +45,11 @@ public class Sphere extends RadialGeometry implements Intersectable{
 		double th=Math.sqrt(_radius*_radius-d*d);
 		List<GeoPoint> _list= new ArrayList<GeoPoint>();
 		double t1=tm+th;
-		if(t1>0)
-			_list.add(new GeoPoint(ray.getPoint(t1),this)); //adding the first point to the list
+		if(t1>0 && Util.alignZero(t1-max)<=0)
+			 _list.add(new GeoPoint(ray.getPoint(t1),this)); //adding the first point to the list
 		double t2=tm-th;
-		if(t2>0)
-			_list.add(new GeoPoint(ray.getPoint(t2),this));//adding the second point to the list
+		if(t2>0 &&Util.alignZero(t2-max)<=0)
+			 _list.add(new GeoPoint(ray.getPoint(t2),this));//adding the second point to the list
 		if(_list.size()==0)
 			return null;
 		return _list;

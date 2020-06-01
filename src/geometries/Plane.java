@@ -59,7 +59,7 @@ public class Plane extends Geometry implements Intersectable
 	}
 	
 	@Override
-	public List<GeoPoint> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray, double max) {
 		
 		double Nx=_normal.get().getX();
 		double Ny=_normal.get().getY();
@@ -82,8 +82,9 @@ public class Plane extends Geometry implements Intersectable
 		if(Util.isZero(numerator)||Util.isZero(denominator)) //When the ray is parallel to the plane and 't' is infinity OR when P0 is included in the plane  
 			return null;
 		double t=Util.alignZero(numerator/denominator);
-		if (t<0)
+		if (t<0 || Util.alignZero(t-max)>0)
 			return null;
+		
 		List<GeoPoint> list=new ArrayList<GeoPoint>();
 		list.add(new GeoPoint(ray.getPoint(t),this));
 		return list;

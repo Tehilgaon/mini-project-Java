@@ -100,10 +100,10 @@ public class Polygon extends Geometry implements Intersectable {
     }
 
 	@Override
-	public List<GeoPoint> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray, double max) {
 		Plane plane=new Plane(_vertices.get(0),_vertices.get(1).subtract(_vertices.get(0)) //Create a Plane object and send it a Point3D and a Vector
 				.crossProduct(_vertices.get(2).subtract(_vertices.get(1))));
-		List<GeoPoint> list=plane.findIntersections(ray); //calling the plane's findIntersections method
+		List<GeoPoint> list=plane.findIntersections(ray, max); //calling the plane's findIntersections method
 		if(list!=null)
 		{
 			list.get(0).geometry = this;

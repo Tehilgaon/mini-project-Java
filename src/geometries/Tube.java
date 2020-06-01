@@ -49,7 +49,7 @@ public class Tube extends RadialGeometry implements Intersectable{
 
 
 	@Override
-	public List<GeoPoint> findIntersections(Ray ray) {
+	public List<GeoPoint> findIntersections(Ray ray, double max) {
 		// TODO Auto-generated method stub
 		return null;
 	}

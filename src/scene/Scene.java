@@ -7,48 +7,56 @@ import java.util.LinkedList;
 
  
 /** 
- * The class holds variables for the scene, the background color,
+ * Scane class holds variables for the scene, the background color,
  * the geometries involved (a Geometries object), a Camera object,
  * and the ambient light of the scene
+ * 
  * @author Odel & Tehila
- *
  */
 public class Scene {
+	
 	
 	/**
 	 * The scene's name
 	 */
 	String _name;
 	
+	
 	/**
 	 * new Color object that is the background color of the scene
 	 */
 	Color _background;
+	
 	
 	/**
 	 * new AmbientLight object, the AmbientLight's intensity of this scene
 	 */
 	AmbientLight _ambientLight;
 	
+	
 	/**
 	 * new Geometries object which contains a list of geometries
 	 */
 	Geometries _geometries;
+	
 	
 	/**
 	 * new Camera object for the scene
 	 */
 	Camera _camera;
 	
+	
 	/**
 	 * List of light sources
 	 */
 	List<LightSource> _lights;
 	
+	
 	/**
-	 * The distance between the camera ang the viewPlane (double)
+	 * The distance between the camera and the viewPlane (double)
 	 */
 	double _distance;
+	
 	
 	/**
 	 * constructor. It initializes the Geometries object and the lights List
@@ -61,6 +69,7 @@ public class Scene {
 		_lights= new LinkedList<LightSource>();
 	}
 	
+	
 	/**
 	 * _name's getter
 	 * @return scene nama (string)
@@ -69,6 +78,7 @@ public class Scene {
 	{
 		return _name;
 	}
+	
 	
 	/**
 	 * _background getter
@@ -79,6 +89,7 @@ public class Scene {
 		return _background;
 	}
 	
+	
 	/**
 	 * _ambientLight getter
 	 * @return the ambientLight (AmbientLight)
@@ -87,6 +98,7 @@ public class Scene {
 	{
 		return _ambientLight;
 	}
+	
 	
 	/**
 	 * _geometries getter
@@ -97,6 +109,7 @@ public class Scene {
 		return _geometries;
 	}
 	
+	
 	/**
 	 * _camera getter
 	 * @return the camera (Camera)
@@ -105,6 +118,7 @@ public class Scene {
 	{
 		return _camera;
 	}
+	
 	
 	/**
 	 * _distance getter
@@ -115,6 +129,7 @@ public class Scene {
 		return _distance;
 	}
 	
+	
 	/**
 	 * _lights getter
 	 * @return the list of the light sources in the scene 
@@ -123,6 +138,7 @@ public class Scene {
 	{
 		return _lights;
 	}
+	
 	
 	/**
 	 * background setter
@@ -133,6 +149,7 @@ public class Scene {
 		_background=background;
 	}
 	
+	
 	/**
 	 * _ambientLight setter
 	 * @param ambientLight
@@ -141,6 +158,7 @@ public class Scene {
 	{
 		_ambientLight=ambientLight;
 	}
+	
 	
 	/**
 	 * _camera setter
@@ -151,6 +169,7 @@ public class Scene {
 		_camera=camera;
 	}
 	
+	
 	/**
 	 * _distance setter
 	 * @param distance between the camera and the viewPlane
@@ -160,14 +179,26 @@ public class Scene {
 		_distance=distance;
 	}
 	
+	
 	/**
-	 * Adding geometries to the geometries's list by calling to Geometries's add()
+	 * Adding geometries to the geometries's list 
 	 * @param geometries a Geometries object which contains a list of geometries
 	 */
 	public void addGeometries(Intersectable... geometries)
 	{
 		_geometries.add(geometries);
 	}
+	
+	
+	/**
+	 * removing geometries from the geometries's list 
+	 * @param geometries a Geometries object which contains a list of geometries
+	 */
+	public void removeGeometries(Intersectable... geometries)
+	{
+		_geometries.remove(geometries);
+	}
+	
 	
 	/**
 	 * adding light sources to the _light list

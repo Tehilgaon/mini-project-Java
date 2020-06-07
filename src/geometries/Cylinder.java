@@ -4,6 +4,11 @@ import java.util.List;
 import primitives.*;
  
 
+/**
+ * Cylinder class
+ * @author Odel & Tehila
+ *
+ */
 public class Cylinder extends Tube {
 
 	double _height;

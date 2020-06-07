@@ -2,7 +2,7 @@ package primitives;
 
 /**
  * Class Point3D contains 3 coordinates in 3D Cartesian coordinate
- *  
+ * @author Odel & Tehila 
  *
  */
 public class Point3D {
@@ -106,17 +106,24 @@ public class Point3D {
 	public double getX() {
 		return _x.get();
 	}
+	
+	
 	public double getY() {
 		return _y.get();
 	}
+	
+	
 	public double getZ() {
 		return _z.get();
 	}
 	
+	
 	@Override
 	public String toString() {
-		return ""+_x.toString()+","+_y.toString()+","+_z.toString();
+		return "( "+_x.toString()+","+_y.toString()+","+_z.toString()+" )";
 	}
+	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(this==obj) return true;

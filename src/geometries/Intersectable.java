@@ -2,6 +2,7 @@ package geometries;
 import java.util.*;  
 import primitives.*;
 
+
 /**
  * Interface representing all classes that can calculate their 
  * intersection points with a ray. It contains the function "findIntersection".
@@ -9,24 +10,48 @@ import primitives.*;
  */
 public interface Intersectable {
 	
+	
+	/**
+	 * calculates all the intersection points of a ray with geometry
+	 * @param ray
+	 * @return a list of pairs, each pair being a point with the geometry it is on (list<GeoPoint>)
+	 */
+	default List<GeoPoint> findIntersections(Ray ray) {
+    	return findIntersections(ray, Double.POSITIVE_INFINITY);
+	}
+
+	
+	/**
+	 * calculates the intersection points of a ray with geometry 
+	 * that their distance from the ray's position is less then MAX
+	 * @param ray
+	 * @param max distance
+	 * @return list of GeoPoints
+	 */
+	List<GeoPoint> findIntersections(Ray ray, double max);
+	
+	
 	/**
 	 * Static class contains a Point3D and Geometry. 
 	 * It is designed to attribute a certain point to the geometry it is on
 	 */
 	public static class GeoPoint {
 		
+		
 		/**
-		 * Geometry, One of the geometries inherited from the Geometry class
+		 * Geometry 
 		 */
 	    public Geometry geometry;
 	    
+	    
 	    /**
-	     * a point on the geometry
+	     * Point3D
 	     */
 	    public Point3D point;
 	    
+	    
 	    /**
-	     * Constructor that initializes both fields
+	     * Constructor  
 	     * @param Point  
 	     * @param Geometry
 	     */
@@ -35,6 +60,7 @@ public interface Intersectable {
 	    	geometry=Geometry;
 	    	point= Point;
 	    }
+	    
 	    
 	    @Override
 		public boolean equals(Object obj) {
@@ -46,15 +72,5 @@ public interface Intersectable {
 	    }
 	}
 
-	/**
-	 * A function that calculates the intersection points of a ray with geometry
-	 * @param ray
-	 * @return a list of pairs, each pair being a point with the geometry it is on (list<GeoPoint>)
-
-	 */
-	default List<GeoPoint> findIntersections(Ray ray) {
-    	return findIntersections(ray, Double.POSITIVE_INFINITY);
-	}
-
-	List<GeoPoint> findIntersections(Ray ray, double max);
+	
 }

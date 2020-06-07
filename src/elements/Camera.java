@@ -1,20 +1,42 @@
 package elements;
 
 import primitives.*;
+
+
 /**
  * Camera's class contains the camera's location(Point3D) and three Vectors
  * @author Odel & Tehila
  *
  */
 public class Camera {
+	
+	
+	/**
+	 * camera's location(Point3D)
+	 */
 	Point3D _p0;
+	
+	
+	/**
+	 * Up vector 
+	 */
 	Vector _vUp;
+	
+	
+	/**
+	 * Vector toward the scene, aimed at the center of the view Plane
+	 */
 	Vector _vTo;
+	
+	
+	/**
+	 * Right vector 
+	 */
 	Vector _vRight;
 	
 	
 	/**
-	 * get Point3D p0, the camera's center point
+	 * p0 getter
 	 * @return Point3D
 	 */
 	public Point3D getP0()
@@ -24,7 +46,7 @@ public class Camera {
 	
 	
 	/**
-	 * get Vector vUp
+	 * vUp getter
 	 * @return Vector
 	 */
 	public Vector getvUp()
@@ -34,7 +56,7 @@ public class Camera {
 	
 	
 	/**
-	 * get Vector vRight
+	 * vRight getter
 	 * @return Vector
 	 */
 	public Vector getvRight()
@@ -42,14 +64,16 @@ public class Camera {
 		return _vRight;
 	}
 	
+	
 	/**
-	 * get Vector vTo, vTo aimed at the center of the view Plane
+	 * vTo getter
 	 * @return Vector
 	 */
 	public Vector getvTo()
 	{
 		return _vTo;
 	}
+	
 	
 	/**
 	 * Constructor, Normalizes both vectors and calculates the third one
@@ -68,8 +92,9 @@ public class Camera {
 		}		
 	}
 	
+	
 	/**
-	 * 
+	 * Calculates a ray through each of the pixels on the view plane
 	 * @param nX number of pixels in X axis
 	 * @param nY number of pixels in Y axis
 	 * @param j the column index (With i define a specific pixel)
@@ -83,18 +108,26 @@ public class Camera {
             double screenWidth, double screenHeight)
 	{
 		Point3D pc=_p0.add(_vTo.scale(screenDistance));
+		
 		double Ry=screenHeight/nY;
 		double Rx=screenWidth/nX;
-		double Yi=((i-((nY-1)/2.0)))*Ry;
-		double Xj=((j-((nX-1)/2.0)))*Rx;
-		Point3D Pij=pc;
+		
+		double Yi=((i - ((nY - 1) / 2.0)))*Ry;
+		double Xj=((j - ((nX - 1) / 2.0)))*Rx;
+		
+		Point3D Pij=pc; 
+		
 		if(Yi!=0 && Xj==0)
 			Pij=pc.add(_vUp.scale(-1*Yi));
+		
 		if(Yi==0&& Xj!=0)
 			Pij=pc.add(_vRight.scale(Xj));
+		
 		if(Yi!=0 && Xj!=0)
 			Pij=pc.add(_vRight.scale(Xj).subtract(_vUp.scale(Yi)));
+		
 		Vector Vij=Pij.subtract(_p0);
+		
 		Ray ray=new Ray(_p0,Vij);
 		return ray;
 	}

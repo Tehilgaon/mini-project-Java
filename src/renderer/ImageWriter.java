@@ -16,7 +16,9 @@ import javax.imageio.stream.*;
  * @author Dan
  */
 public class ImageWriter {
+	
 	private double _imageWidth, _imageHeight;
+	
 	private int _nX, _nY;
 
 	private final String PROJECT_PATH = System.getProperty("user.dir");
@@ -25,6 +27,7 @@ public class ImageWriter {
 
 	private String _imageName;
 
+	
 	// ***************** Constructors ********************** //
 	/**
 	 * Image Writer constructor accepting image name and View Plane parameters,
@@ -43,6 +46,7 @@ public class ImageWriter {
 
 		_image = new BufferedImage(_nX, _nY, BufferedImage.TYPE_INT_RGB);
 	}
+	
 
 	// ***************** Getters/Setters ********************** //
 	/**
@@ -50,23 +54,29 @@ public class ImageWriter {
 	 * @return the width
 	 */
 	public double getWidth()  { return _imageWidth;  }
+	
+	
     /**
      * View Plane height getter
      * @return the height
      */
 	public double getHeight() { return _imageHeight; }
 
+	
     /**
      * View Plane Y axis resolution
      * @return the amount of vertical pixels
      */
 	public int getNy() { return _nY; }
+	
+	
     /**
      * View Plane X axis resolution
      * @return the amount of horizontal pixels
      */
 	public int getNx() { return _nX; }
 
+	
 	// ***************** Operations ******************** //
 
 	/**
@@ -88,6 +98,7 @@ public class ImageWriter {
 			e.printStackTrace();
 		}
 	}
+	
 
 	/**
 	 * The function writePixel writes a color of a specific pixel

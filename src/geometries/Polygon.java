@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import primitives.*;
 import static primitives.Util.*;
 
+
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
@@ -13,16 +14,22 @@ import static primitives.Util.*;
  * @author Dan
  */
 public class Polygon extends Geometry implements Intersectable {
+	
+	
     /**
      * List of polygon's vertices
      */
     protected List<Point3D> _vertices;
+    
+    
     /**
      * Associated plane in which the polygon lays
      */
     protected Plane _plane;
 
+    
     /**
+     * Constructor #1
      * Polygon constructor based on vertices list. The list must be ordered by edge
      * path. The polygon must be convex.
      * 
@@ -82,53 +89,86 @@ public class Polygon extends Geometry implements Intersectable {
         }
     }
     
+    
+    /**
+     * Constructor #2
+     * @param color emission
+     * @param vertices
+     */
     public Polygon(Color color, Point3D... vertices ) 
     {
     	this(vertices);
     	_emission= color;
     }
     
+    
+    /**
+     * Constructor #3
+     * @param material
+     * @param color emission
+     * @param vertices
+     */
     public Polygon(Material material,Color color, Point3D... vertices ) 
     {
     	this(color,vertices);
     	_material= material; 
     }
     
+    
+    @Override
+    public String toString() {
+        String string = "";
+        for (Point3D p : _vertices) 
+        	string += p.toString();
+
+        return string;
+    }
+    
+    
     @Override
     public Vector getNormal(Point3D point) {
         return _plane.getNormal(point);
     }
 
+    
 	@Override
 	public List<GeoPoint> findIntersections(Ray ray, double max) {
-		Plane plane=new Plane(_vertices.get(0),_vertices.get(1).subtract(_vertices.get(0)) //Create a Plane object and send it a Point3D and a Vector
-				.crossProduct(_vertices.get(2).subtract(_vertices.get(1))));
-		List<GeoPoint> list=plane.findIntersections(ray, max); //calling the plane's findIntersections method
-		if(list!=null)
+		 
+		List<GeoPoint> list=_plane.findIntersections(ray, max); //calling the plane's findIntersections method
+		
+		if(list == null)
+			return null;
+			
+		
+		list.get(0).geometry = this;
+			
+		//vectorList contains the results of subtracting P0 from the polygon vertexes
+		List<Vector> vectorList=new ArrayList<Vector>(); 
+		for(int i=0;i<_vertices.size();i++) 
+			vectorList.add(_vertices.get(i).subtract(ray.getP0()));
+			
+		//resultList contains the results of dotProduct between the normal of each 'wall' and the ray's vector
+		List<Double> resultList=new ArrayList<Double>(); 
+		for(int i=0;i<_vertices.size();i++)
 		{
-			list.get(0).geometry = this;
-			List<Vector> vectorList=new ArrayList<Vector>(); //vectorList contains the results of subtracting P0 from the polygon vertexes
-			for(int i=0;i<_vertices.size();i++) 
-				vectorList.add(_vertices.get(i).subtract(ray.getP0()));
-			List<Double> resultList=new ArrayList<Double>(); //resultList contains the results of dotProduct between the normal of each 'wall' and the ray's vector
-			for(int i=0;i<_vertices.size();i++)
-			{
-				if(i+1==_vertices.size())
-					resultList.add((vectorList.get(0).crossProduct(vectorList.get(i))).dotProduct(ray.getDirection()));
-				else
-					resultList.add(vectorList.get(i+1).crossProduct(vectorList.get(i)).dotProduct(ray.getDirection()));
-			}
-			double Plus=0, Minus=0;
-			for(int i=0;i<resultList.size();i++)
-			{
-				if(resultList.get(i)>0)
-					Plus++;
-				if(resultList.get(i)<0)
-					Minus++;
-			}
-			if (Plus==resultList.size()||Minus==resultList.size())
-				return list; 
+			if(i+1==_vertices.size())
+				resultList.add((vectorList.get(0).crossProduct(vectorList.get(i))).dotProduct(ray.getDirection()));
+			else
+				resultList.add(vectorList.get(i+1).crossProduct(vectorList.get(i)).dotProduct(ray.getDirection()));
 		}
-		return null;
+		
+		//checking whether all elements have the same sign
+		double Plus=0, Minus=0;
+		for(int i=0;i<resultList.size();i++)
+		{
+			if(resultList.get(i)>0)
+				Plus++;
+			if(resultList.get(i)<0)
+				Minus++;
+		}
+		if (Plus != resultList.size() && Minus != resultList.size())
+			return null; 
+		
+		return list;
 	}
 }

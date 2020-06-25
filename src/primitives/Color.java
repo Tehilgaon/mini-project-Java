@@ -10,7 +10,7 @@ package primitives;
  */
 public class Color {
     /**
-     * The internal fields tx`o maintain RGB components as double numbers from 0 to
+     * The internal fields maintain RGB components as double numbers from 0 to
      * whatever...
      */
     private double _r = 0.0, _g = 0.0, _b = 0.0;
@@ -171,5 +171,17 @@ public class Color {
         double b = _b / k;
         return new Color(r, g, b);
     }
+    
+
+    @Override
+	public boolean equals(Object obj) {
+		if(this==obj) return true;
+		if(obj==null) return false;
+		if(!(obj instanceof Ray)) return false;
+		Color oth=(Color)obj;
+		return (_r == oth._r && _g == oth._g && _b == oth._b);
+	}
+    
+    
 
 }

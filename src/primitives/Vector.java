@@ -155,7 +155,7 @@ public class Vector {
 	
 	/**
 	 * _head getter
-	 * @return
+	 * @return Point3D
 	 */
 	public Point3D get() {
 		return _head;

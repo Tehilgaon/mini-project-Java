@@ -1,6 +1,10 @@
 package elements;
 
 import primitives.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
+
 
 
 /**
@@ -33,6 +37,12 @@ public class Camera {
 	 * Right vector 
 	 */
 	Vector _vRight;
+	
+	
+	/**
+	 * 
+	 */
+	int _numRays;
 	
 	
 	/**
@@ -74,6 +84,7 @@ public class Camera {
 		return _vTo;
 	}
 	
+	 
 	
 	/**
 	 * Constructor, Normalizes both vectors and calculates the third one
@@ -89,7 +100,15 @@ public class Camera {
 			_vUp=vUp.normalized();
 			_vTo=vTo.normalized();
 			_vRight=vTo.crossProduct(vUp);	//the third vector, who orthogonal to both of them
+			_numRays=1;
 		}		
+	}
+	
+	
+	public Camera(Point3D p0, Vector vTo, Vector vUp, int numRays)
+	{
+		this(p0, vTo, vUp);
+		_numRays= numRays;
 	}
 	
 	
@@ -126,10 +145,51 @@ public class Camera {
 		if(Yi!=0 && Xj!=0)
 			Pij=pc.add(_vRight.scale(Xj).subtract(_vUp.scale(Yi)));
 		
-		Vector Vij=Pij.subtract(_p0);
+		Vector Vij=Pij.subtract(_p0).normalized();
 		
 		Ray ray=new Ray(_p0,Vij);
 		return ray;
+	}
+	
+	
+	/**
+	 * super sampling, make sure the geometries look smoother and less pixelated
+	 * Returns a list of rays from the camera through one pixel
+	 * @param nX
+	 * @param nY
+	 * @param j
+	 * @param i
+	 * @param screenDistance
+	 * @param screenWidth
+	 * @param screenHeight
+	 * @return list of rays
+	 */
+	public List<Ray> constructBeamRayThroughPixel(int nX, int nY,int j, int i, double screenDistance,
+            double screenWidth, double screenHeight)
+	{
+		Ray mainRay = constructRayThroughPixel(nX,nY, j, i, screenDistance, screenWidth, screenHeight);
+		List<Ray> listOfRays= new ArrayList<Ray>();
+		listOfRays.add(mainRay);
+		if(_numRays == 1)
+			return listOfRays;
+		
+		Point3D mainPoint = mainRay.getPoint(screenDistance);
+		double Ry=screenHeight/nY;
+		double Rx=screenWidth/nX;
+		
+		for(int k=0;k<_numRays;k++)
+		{
+			Random rand=new Random();
+			double randX =  (Rx)*rand.nextDouble() - (Rx/2);
+		 	double randY =  (Ry)*rand.nextDouble() - (Ry/2);
+		 	Vector d = _vRight.scale(randX).add(_vUp.scale(randY));	 	
+			Point3D point= mainPoint.add(d);
+			Vector v = point.subtract(_p0).normalized();
+			listOfRays.add(new Ray(_p0,v));
+		}
+		
+		return listOfRays;
+		
 	}
 
 }

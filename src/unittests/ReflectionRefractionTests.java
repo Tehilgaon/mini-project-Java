@@ -24,7 +24,7 @@ public class ReflectionRefractionTests {
 	/**
 	 * Produce a picture of a sphere lighted by a spot light
 	 */
-	@Test
+	//@Test
 	public void twoSpheres() {
 		Scene scene = new Scene("Test scene");
 		scene.setCamera(new Camera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, -1, 0)));
@@ -39,7 +39,6 @@ public class ReflectionRefractionTests {
 
 		scene.addLights(new SpotLight(new Color(1000, 600, 0), new Point3D(-100, 100, -500), new Vector(-1, 1, 2), 1,
 				0.0004, 0.0000006));
-
 		ImageWriter imageWriter = new ImageWriter("twoSpheres", 150, 150, 500, 500);
 		Render render = new Render(imageWriter, scene);
 
@@ -50,7 +49,7 @@ public class ReflectionRefractionTests {
 	/**
 	 * Produce a picture of a sphere lighted by a spot light
 	 */
-	@Test
+	//@Test
 	public void twoSpheresOnMirrors() {
 		Scene scene = new Scene("Test scene");
 		scene.setCamera(new Camera(new Point3D(0, 0, -10000), new Vector(0, 0, 1), new Vector(0, -1, 0)));
@@ -70,7 +69,7 @@ public class ReflectionRefractionTests {
 				   new Vector(-1, 1, 4), 1, 0.00001, 0.000005));
 
 		ImageWriter imageWriter = new ImageWriter("twoSpheresMirrored", 2500, 2500, 500, 500);
-		Render render = new Render(imageWriter, scene);
+		Render render = new Render(imageWriter, scene).setMultithreading(4).setDebugPrint();
 
 		render.renderImage();
 		render.writeToImage();
@@ -80,7 +79,7 @@ public class ReflectionRefractionTests {
 	 * Produce a picture of a two triangles lighted by a spot light with a partially transparent Sphere
 	 *  producing partial shadow
 	 */
-	@Test
+	//@Test
 	public void trianglesTransparentSphere() {
 		Scene scene = new Scene("Test scene");
 		scene.setCamera(new Camera(new Point3D(0, 0, -1000), new Vector(0, 0, 1), new Vector(0, -1, 0)));
@@ -101,7 +100,7 @@ public class ReflectionRefractionTests {
 				new Point3D(60, -50, 0), new Vector(0, 0, 1), 1, 4E-5, 2E-7));
 
 		ImageWriter imageWriter = new ImageWriter("shadow with transparency", 200, 200, 600, 600);
-		Render render = new Render(imageWriter, scene);
+		Render render = new Render(imageWriter, scene);//.setMultithreading(3).setDebugPrint();
 
 		render.renderImage();
 		render.writeToImage();
@@ -128,8 +127,8 @@ public class ReflectionRefractionTests {
 						new Point3D(50, 50, 250), new Point3D(-50, 50, 250), new Point3D(0, -50, 250)) 
 				,new Plane(new Material(0.5, 0.6, 60,0,0.5),new Color(java.awt.Color.BLACK),//
 					new Point3D(50, 50, 260), new Point3D(-50, 50,260), new Point3D(0, -50, 260))//
-				,new Sphere(new Color(java.awt.Color.GREEN), new Material(0.2, 0.2, 30, 0.6, 0), // 
-						12, new Point3D(0, 0, 200))
+				,new Sphere(new Color(java.awt.Color.GREEN), new Material(0.2, 0.2, 30, 0, 0), // 
+						12, new Point3D(0 , -100, 10))
 				 
 		);
 
@@ -137,6 +136,33 @@ public class ReflectionRefractionTests {
 				new Point3D(100, -40, 40), new Vector(-1, 0, 0), 1, 4E-5, 2E-7));
 
 		ImageWriter imageWriter = new ImageWriter("sphere inside a pyramid", 200, 200, 600, 600);
+		Render render = new Render(imageWriter, scene);
+
+		render.renderImage();
+		render.writeToImage();
+	}
+	
+	
+	//@Test
+	public void reflectedSphere() {
+		Scene scene = new Scene("Test scene");
+		scene.setCamera(new Camera(new Point3D(0, 0, -5000), new Vector(0, 0, 1), new Vector(0, -1, 0)));
+		scene.setDistance(1000);
+		scene.setBackground(Color.BLACK);
+		scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));
+
+		scene.addGeometries( 
+				new Sphere(new Color(java.awt.Color.RED),new Material(0.2, 0.2, 30, 0.6, 0),25,new Point3D(20,20,60)),
+			    new Plane(new Material(0.5, 0.6, 60,0.5,0),Color.BLACK,new Point3D(0,0, 120), new Point3D(2,3, 120),new Point3D(7,8, 120 )),
+				new Sphere(new Color(java.awt.Color.ORANGE),new Material(0.2, 0.2, 30, 0.6, 0),50,new Point3D(-20,-20,500)),
+				new Plane(new Material(0.5, 0.6, 60,0.5,0),Color.BLACK,new Point3D(0,0, 600), new Point3D(2,3, 600),new Point3D(7,8, 600 ))
+				 
+		);
+
+		scene.addLights(new SpotLight(new Color(200, 150, 150), 
+				new Point3D(-10, -10, -20), new Vector(1, 2, 1), 1, 4E-5, 2E-7));
+
+		ImageWriter imageWriter = new ImageWriter("reflectedSphere", 200, 200, 600, 600);
 		Render render = new Render(imageWriter, scene);
 
 		render.renderImage();

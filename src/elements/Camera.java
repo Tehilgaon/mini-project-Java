@@ -192,4 +192,34 @@ public class Camera {
 		
 	}
 
+	
+	public List<Point3D> constructCornersThroughPixel (int nX, int nY,int j, int i, double screenDistance,
+            double screenWidth, double screenHeight)
+	{
+		Point3D pc=_p0.add(_vTo.scale(screenDistance));
+		
+		double Ry=screenHeight/nY;
+		double Rx=screenWidth/nX;
+		
+		double Yi=((i - ((nY - 1) / 2.0)))*Ry;
+		double Xj=((j - ((nX - 1) / 2.0)))*Rx;
+		
+		Point3D Pij=pc; 
+		
+		if(Yi!=0 && Xj==0)
+			Pij=pc.add(_vUp.scale(-1*Yi));
+		
+		if(Yi==0&& Xj!=0)
+			Pij=pc.add(_vRight.scale(Xj));
+		
+		if(Yi!=0 && Xj!=0)
+			Pij=pc.add(_vRight.scale(Xj).subtract(_vUp.scale(Yi)));
+		
+		Point3D ul= Pij.add(_vUp.scale(Ry/2).add(_vRight.scale(-Rx/2)));
+		Point3D ur= Pij.add(_vUp.scale(Ry/2).add(_vRight.scale(Rx/2)));
+		Point3D dl= Pij.add(_vUp.scale(-Ry/2).add(_vRight.scale(-Rx/2)));
+		Point3D dr= Pij.add(_vUp.scale(-Ry/2).add(_vRight.scale(Rx/2)));
+		
+		return List.of(ul,ur,dl,dr);
+	}
 }

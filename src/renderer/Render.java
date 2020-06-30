@@ -60,6 +60,10 @@ public class Render {
 	 * The scattering space of the rays around the main reflected ray
 	 */
 	private static final double Rwideness = 50;
+	
+	
+	
+	private static final int divLevel = 3; 
 
 	
 	// THREAD variables //
@@ -88,7 +92,7 @@ public class Render {
 	public void renderImage()
 	{
 		Camera camera=_scene.getCamera();
-		java.awt.Color background = _scene.getBackground().getColor();
+		 
 		int nX = _imageWriter.getNx();
 		int nY = _imageWriter.getNy();
 		double distance=_scene.getDistance(); // distance between camera and view plane
@@ -102,20 +106,12 @@ public class Render {
 			threads[i] = new Thread(() -> {
 				Pixel pixel = new Pixel(); // Auxiliary thread’s pixel object
 				while (thePixel.nextPixel(pixel)) {
-					List<Ray> listOfRays = camera.constructBeamRayThroughPixel(nX, nY, pixel.col, pixel.row,
+					List<Point3D> corners = camera.constructCornersThroughPixel(nX, nY, pixel.col, pixel.row,
 					distance, width, height);
-					Color c= Color.BLACK;
-					boolean isIntersect= false;
-					for(Ray ray: listOfRays) {
-						GeoPoint closestPoint =  findClosestIntersection(ray);
-						if(closestPoint != null)
-						{
-							c = c.add(calcColor(closestPoint, ray));
-							isIntersect=true;
-						}
-					}
-					_imageWriter.writePixel(pixel.col, pixel.row,isIntersect == false ? background
-							: c.reduce(listOfRays.size()).getColor());
+					
+					Color c= calcRec(corners.get(0),corners.get(1),corners.get(2),corners.get(3),camera.getP0(),divLevel);
+					
+					_imageWriter.writePixel(pixel.col, pixel.row,c.getColor());
 							 
 			}});
 		}
@@ -391,7 +387,7 @@ public class Render {
 		RaysList.add(mainRay);
 		
 		double x=mainRay.getDirection().get().getX();
-		double y=mainRay.getDirection().get().getX();
+		double y=mainRay.getDirection().get().getY();
 		Vector normal1 = new Vector(-y,x,0);
 		Vector normal2=normal1.crossProduct(mainRay.getDirection());
 		
@@ -414,9 +410,9 @@ public class Render {
 	
 	//-------ADAPTIVE SUPERSAMPLING-------//
 	
-	public Color calcRec(Point3D p1,Point3D p2,Point3D p3,Point3D p4,Point3D cameraP0, int divLevel)	{
+	public Color calcRec(Point3D p0,Point3D p1,Point3D p2,Point3D p3,Point3D cameraP0, int divLevel)	{
 		 
-		List<Point3D> edgeList= List.of(p1,p2,p3,p4);
+		List<Point3D> edgeList= List.of(p0,p1,p2,p3);
 		List <Color> colors = new ArrayList<Color>();
 		
 		for(int i=0;i<4;i++) {
@@ -429,16 +425,18 @@ public class Render {
 		}
 		
 		if((colors.get(0).equals(colors.get(1))&& colors.get(0).equals(colors.get(2))&&
-				colors.get(0).equals(colors.get(3))) || divLevel<1)
+				colors.get(0).equals(colors.get(3))) || divLevel == 0)
 			return colors.get(0); 
 		
 	 
 		Point3D midUp= findMiddlePoint(edgeList.get(0),edgeList.get(1));
 		Point3D midDown= findMiddlePoint(edgeList.get(2),edgeList.get(3));
 		Point3D midRight= findMiddlePoint(edgeList.get(1),edgeList.get(3));
-		Point3D midLeft= findMiddlePoint(edgeList.get(0),edgeList.get(4));
+		Point3D midLeft= findMiddlePoint(edgeList.get(0),edgeList.get(2));
 		Point3D center= findMiddlePoint(midRight,midLeft);
 		
+		
+		//Recursive call 
 		return calcRec(edgeList.get(0),midUp,midLeft,center,cameraP0,divLevel-1).scale(0.25)
 				.add(calcRec(midUp,edgeList.get(1),center,midRight,cameraP0, divLevel-1).scale(0.25))
 				.add(calcRec(midLeft,center,edgeList.get(2),midDown,cameraP0, divLevel-1).scale(0.25))
